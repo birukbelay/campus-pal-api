@@ -8,7 +8,7 @@ import {
   Delete,
 } from '@nestjs/common';
 import { UserService } from './users.service';
-import { RegisterUserInput, UpdateUserDto } from './dto/user.mut.dto';
+import { RegisterUserInput, UpdateMeDto } from './dto/user.mut.dto';
 
 @Controller('users')
 export class UsersController {
@@ -20,22 +20,22 @@ export class UsersController {
   }
 
   @Get()
-  findMany() {
+  async findMany() {
     return this.usersService.findMany({});
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string) {
     return this.usersService.findById(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  async update(@Param('id') id: string, @Body() updateUserDto: UpdateMeDto) {
     return this.usersService.updateById(id, updateUserDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string) {
     return this.usersService.deleteById(id);
   }
 }

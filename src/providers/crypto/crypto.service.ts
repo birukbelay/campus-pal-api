@@ -32,11 +32,11 @@ export class CryptoService {
   }
 
   public async verifyHash(hash: string, plain: string) {
-    // logTrace(plain, hash)
     try {
       return await argon2.verify(hash, plain);
     } catch (e) {
       logTrace('verifyHashErr-', e.message, ColorEnums.BgMagenta);
+      logTrace(hash, plain);
       throw new ServiceUnavailableException('Internal server Error');
     }
   }

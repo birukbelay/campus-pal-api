@@ -1,10 +1,10 @@
-import { ConfigTypes, getFireBasePrivateKey, tryReadEnv } from './configTypes';
+import { ConfigTypes, tryReadEnv } from './configTypes';
 import { ColorEnums, logTrace } from '../logger';
 import * as dotenv from 'dotenv';
 // import fs from 'fs';
 import { LoadEnvConfig } from './loadEnvConfig';
 
-class EnvVar {
+export class EnvVar {
   private static _instance: EnvVar;
   envVariables: ConfigTypes;
   private constructor() {
@@ -29,10 +29,11 @@ class EnvVar {
     try {
       this.envVariables = LoadEnvConfig(req);
     } catch (e) {
-      logTrace('z error is', e.message, ColorEnums.BgRed);
+      logTrace('FAILED TO LOAD ENV: z error is', e.message, ColorEnums.BgRed);
+      throw new Error('failed to load enviroment variables, exiting');
     }
   }
-  static get Instance() {
+  static get getInstance() {
     if (!EnvVar._instance) {
       EnvVar._instance = new EnvVar();
     }
@@ -42,4 +43,4 @@ class EnvVar {
   }
 }
 
-export const EnvConfigs = EnvVar.Instance;
+export const EnvConfigs = EnvVar.getInstance;

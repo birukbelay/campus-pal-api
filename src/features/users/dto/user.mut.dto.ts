@@ -9,6 +9,12 @@ import {
   MinLength,
 } from 'class-validator';
 
+export class VerifyCodeInput {
+  @IsEmail()
+  email: string;
+
+  code: string;
+}
 export class RegisterUserInput {
   @IsMobilePhone()
   // @Validate(UserExitsValidator)
@@ -37,7 +43,7 @@ export class RegisterUserInput {
   avatar?: string;
 }
 
-export class UpdateUserDto {
+export class UpdateMeDto {
   @IsOptional()
   @IsEmail()
   email?: string;
@@ -51,7 +57,7 @@ export class UpdateUserDto {
   avatar?: string;
 }
 
-export class UpdateUserInput extends PartialType(RegisterUserInput) {
+export class UpdateUserWithRole extends PartialType(RegisterUserInput) {
   @IsString()
   @IsOptional()
   role?: RoleType;

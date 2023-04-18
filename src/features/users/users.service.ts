@@ -21,7 +21,7 @@ export class UserService extends MongoGenericRepository<User> {
     const user: User = await this.userModel
       .findOne(where)
       .select(
-        '+password +verificationCodeHash +verificationCodeExpires +sessions.hashedRefreshToken',
+        '+password +verificationCodeHash +verificationCodeExpires +hashedRefreshToken',
       )
       .lean();
     logTrace('foundUser=', user);

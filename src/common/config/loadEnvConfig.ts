@@ -7,7 +7,7 @@ import {
 
 export const LoadEnvConfig = (req = false): ConfigTypes => {
   return {
-    mode: tryReadEnv('NODE_ENV'),
+    mode: tryReadEnv('NODE_ENV', 'dev', req),
     port: parseInt(tryReadEnv('PORT', '6040', req)),
     serverUrl: tryReadEnv('SERVER_URL', `http://localhost:5025`, req),
     clientUrl: tryReadEnv('CLIENT_URL', `http://localhost:3000`, req),

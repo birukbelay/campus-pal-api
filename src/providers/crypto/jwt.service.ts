@@ -3,14 +3,14 @@ import { Injectable } from '@nestjs/common';
 import { verify, JwtPayload, sign } from 'jsonwebtoken';
 
 import { ConfigTypes } from '../../common/config/configTypes';
-import { EnvConfigs } from '../../common/config/config.instances';
+import { EnvConfigs, EnvVar } from '../../common/config/config.instances';
 import { logTrace } from '../../common/logger';
 
 @Injectable()
 export class CustomJwtService {
   private _envConfig: ConfigTypes;
   constructor() {
-    this._envConfig = EnvConfigs;
+    this._envConfig = EnvVar.getInstance;
   }
 
   // =============== Any other Token, user provides the secret & payload type

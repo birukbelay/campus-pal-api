@@ -15,9 +15,8 @@ import { RegisterUserInput, UpdateUserInput, UserRes } from '../users';
 import {
   UpdateMeDto,
   UpdateUserWithRole,
-  VerifyCodeInput,
 } from '../users/dto/user.mut.dto';
-import { LoginUserInput, TokenInput } from './dto/auth.input.dto';
+import { LoginUserInput, TokenInput , VerifyCodeInput} from './dto/auth.input.dto';
 import { AuthTokenResponse } from './dto/auth.response.dto';
 import {
   JwtGuard,
@@ -28,7 +27,7 @@ import {
   UserFromToken,
 } from './auth.dependencies';
 
-@Controller('')
+@Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
@@ -41,7 +40,7 @@ export class AuthController {
   @Post('activate')
   async activateWithCode(@Body() input: VerifyCodeInput) {
     const userResponse = await this.authService.activateAccountByCode(
-      input.email,
+      input.phoneOrEmail,
       input.code,
     );
     if (!userResponse) throw new BadRequestException('Code is not valid');

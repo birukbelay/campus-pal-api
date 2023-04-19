@@ -12,6 +12,15 @@ export class TokenInput {
   @IsNotEmpty()
   token: string;
 }
+export class VerifyCodeInput {
+  @IsString()
+  @IsNotEmpty()
+  phoneOrEmail: string;
+
+  @IsString()
+  @IsNotEmpty()
+  code: string;
+}
 export class LoginUserInput {
   @IsString()
   @IsNotEmpty()

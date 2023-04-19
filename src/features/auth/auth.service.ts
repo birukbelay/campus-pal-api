@@ -40,28 +40,34 @@ export class AuthService {
     input: RegisterUserInput,
   ): Promise<boolean> {
     try {
+      logTrace('found user-',"--");
+      // TODO ! dependent on the app
       const user = await this.usersService.findOne({
-        email: input.email,
+        phone: input.phone,
         active: true,
       });
       logTrace('found user-', user);
+      if(user){
+        return true
+      }
+      
       input.password = await this.cryptoService.createHash(input.password);
       //if the user already exist we will make this empty
       let copyInput: any = { ...input };
       //If the user
-      if (user) {
-        if (user.verificationCodeExpires > Date.now())
-          // if it has not expired
-          return true;
-        copyInput = {};
-      }
+      // if (user) {
+      //   if (user.verificationCodeExpires > Date.now())
+      //     // if it has not expired
+      //     return true;
+      //   copyInput = {};
+      // }
 
       const code = this.cryptoService.randomCode();
       const codeHash = await this.cryptoService.createHash(code);
 
       // save the hashed value of the Code and set its expire time now + 30 min
       const usr = await this.usersService.createOne(
-        // { email: input.email },
+        
         {
           ...copyInput,
           verificationCodeHash: codeHash,
@@ -75,7 +81,7 @@ export class AuthService {
 
       // send verification email with the code
       const emRes = await this.verificationService.sendVerificationCode(
-        input.email,
+        input.phone,
         code,
       );
 
@@ -87,10 +93,10 @@ export class AuthService {
 
   //AS-1.2: - checks user exists, - check if the hash of codes matches & is not expired, - activates user
   public async activateAccountByCode(
-    email: string,
+    phoneOrEmail: string,
     code: string,
   ): Promise<UserRes> {
-    const verified = await this.verifyCode(email, code);
+    const verified = await this.verifyCode(phoneOrEmail, code);
     if (!verified) {
       throw new BadRequestException(`Code is wrong Or Have Expired`);
     }
@@ -100,8 +106,9 @@ export class AuthService {
         user: null,
       };
     }
+    // TODO! FIXME !: depend on the project Phone Or email
     const updatedUser = await this.usersService.updateOne(
-      { email: email },
+      { phone: phoneOrEmail },
       {
         active: true,
       },
@@ -111,8 +118,9 @@ export class AuthService {
   }
 
   //Au.S-1.2.1
-  async verifyCode(email: string, code: string): Promise<User> {
-    const user = await this.usersService.findOneWithPwd({ email });
+  async verifyCode(phoneOrEmail: string, code: string): Promise<User> {
+    const user = await this.usersService.userExists(phoneOrEmail);
+    // const user = await this.usersService.findOneWithPwd({ email });
     if (!user) return null;
 
     const isMatch = await this.cryptoService.verifyHash(

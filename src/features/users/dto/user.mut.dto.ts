@@ -9,20 +9,13 @@ import {
   MinLength,
 } from 'class-validator';
 
-export class VerifyCodeInput {
-  @IsEmail()
-  email: string;
 
-  code: string;
-}
 export class RegisterUserInput {
-  @IsMobilePhone()
-  // @Validate(UserExitsValidator)
+  
+  @IsNotEmpty()  
   phone: string;
 
-  @IsEmail()
-  @IsOptional()
-  // @Validate(UserExitsValidator)
+  @IsEmail() 
   email: string;
 
   @IsString()

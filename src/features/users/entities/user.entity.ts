@@ -17,7 +17,7 @@ export class User {
   // })
   readonly _id: string;
 
-  @MProp({ type: String, unique: true})
+  @MProp({ type: String, unique: true })
   phone?: string;
 
   @MProp({ type: String, unique: true, sparse: true })

@@ -8,14 +8,13 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
   // app.use(express.json());
-	// app.use(express.urlencoded({ extended: true }));
+  // app.use(express.urlencoded({ extended: true }));
 
-	
-	app.enableCors({
-		origin: true,
-		methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-		credentials: true,
-	});
+  app.enableCors({
+    origin: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
+  });
   const config = new DocumentBuilder()
     .setTitle('vis example')
     .setDescription('The  API description')
@@ -25,7 +24,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
   await app.listen(port);
-  console.log(` server started @ http://localhost:${port}`);
+  console.log(` server started @ http://localhost:${port}/api`);
 }
 
 bootstrap();

@@ -9,13 +9,12 @@ import {
   MinLength,
 } from 'class-validator';
 
-
 export class RegisterUserInput {
-  
-  @IsNotEmpty()  
+  @IsNotEmpty()
+  @IsMobilePhone()
   phone: string;
 
-  @IsEmail() 
+  @IsEmail()
   email: string;
 
   @IsString()

@@ -9,10 +9,12 @@ export interface PayloadUserForJwtToken {
   user: UserFromToken;
 }
 
-export interface PaginationInputs {
+export class PaginationInputs {
   limit?: number;
 
   page?: number;
+
+  sort?: string = '_id';
 }
 
 export enum RoleType {
@@ -33,6 +35,10 @@ export interface SessionAuthToken {
 export interface IAuthToken {
   accessToken?: string;
   refreshToken?: string;
+}
+export class MessageError {
+  message: string;
+  code: string;
 }
 
 // export interface UserFromRequest extends Partial<UserI> {

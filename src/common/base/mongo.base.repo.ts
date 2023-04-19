@@ -19,6 +19,38 @@ export abstract class MongoGenericRepository<T> {
     this._populateOnFind = populateOnFind;
   }
 
+  public async findMany(
+    filter: FilterQuery<T>,
+    pagination?: PaginationInputs,
+  ): Promise<PaginatedResponse<T>> {
+    let items: T[] = [];
+    // Always make default pagination = 25 with first page
+    const limit = pagination?.limit || 25;
+    const page = pagination?.page || 1;
+
+    const sort = pagination?.sort || '_id';
+    logTrace('filter', filter);
+    try {
+      items = await this._repository
+        .find(filter)
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .sort(sort)
+        .lean();
+
+      const count = await this._repository.countDocuments(filter);
+      logTrace('items', items);
+      return { count, data: items };
+    } catch (e) {
+      logTrace(
+        `${this._repository.modelName}--findManyError=`,
+        e.message,
+        ColorEnums.FgRed,
+      );
+      throw e;
+    }
+  }
+
   //-----  find One Query
   async findById(id: string): Promise<T> {
     try {
@@ -64,33 +96,6 @@ export abstract class MongoGenericRepository<T> {
     } catch (e) {
       logTrace(
         `${this._repository.modelName}--find() error=`,
-        e.message,
-        ColorEnums.FgRed,
-      );
-      throw e;
-    }
-  }
-  public async findMany(
-    filter: FilterQuery<T>,
-    pagination?: PaginationInputs,
-  ): Promise<PaginatedResponse<T>> {
-    let items: T[] = [];
-    // Always make default pagination = 25 with first page
-    const limit = pagination?.limit || 25;
-    const page = pagination?.page || 1;
-    try {
-      items = await this._repository
-        .find(filter)
-        .skip((page - 1) * limit)
-        .limit(limit)
-        .lean();
-
-      const count = await this._repository.countDocuments(filter);
-
-      return { count, data: items };
-    } catch (e) {
-      logTrace(
-        `${this._repository.modelName}--findManyError=`,
         e.message,
         ColorEnums.FgRed,
       );

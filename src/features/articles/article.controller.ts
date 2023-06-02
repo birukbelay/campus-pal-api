@@ -13,22 +13,24 @@ import {
   ArticleQuery,
   CreateArticleInput,
   UpdateArticleDto,
+  ArticleResp
 } from './dto/article.dto';
 import { PaginationInputs } from '../../common/common.types';
 import { RegisterUserInput } from '../users';
 import { pick } from '../../common/util/util';
+import { Article } from './entities/article.entity';
 
 @Controller('article')
 export class ArticleController {
   constructor(private readonly articleService: ArticleService) {}
 
   @Post()
-  createUser(@Body() createUserDto: CreateArticleInput) {
+  createUser(@Body() createUserDto: CreateArticleInput):Promise<Article> {
     return this.articleService.createOne(createUserDto);
   }
 
   @Get()
-  async findMany(@Query() articleQuery: ArticleQuery) {
+  async findMany(@Query() articleQuery: ArticleQuery): Promise<ArticleResp> {
     const filter: PaginationInputs = { sort: 'importance', ...articleQuery };
     const query = pick(articleQuery, ['ownerId', 'tag']);
     // { ownerId: articleQuery.ownerId, tag: articleQuery.tag };

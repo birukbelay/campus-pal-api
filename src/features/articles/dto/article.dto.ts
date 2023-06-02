@@ -22,6 +22,10 @@ export class CreateArticleInput {
   @IsString()
   title: string;
 
+  @IsNotEmpty()
+  @IsString()
+  type: string
+
   @IsOptional()
   coverImage?: string;
 
@@ -59,4 +63,11 @@ export class ArticleQuery {
   page?: number;
   @IsOptional()
   sort?: string = 'importance';
+}
+
+export class ArticleResp{
+  count: number
+
+  data: Article[]
+
 }

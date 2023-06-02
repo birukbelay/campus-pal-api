@@ -39,7 +39,7 @@ export abstract class MongoGenericRepository<T> {
         .lean();
 
       const count = await this._repository.countDocuments(filter);
-      logTrace('items', items);
+      logTrace(`FINDMANY=====>>${count}`, items, ColorEnums.BgBlue);
       return { count, data: items };
     } catch (e) {
       logTrace(
@@ -58,6 +58,8 @@ export abstract class MongoGenericRepository<T> {
         .findById(id)
         .populate(this._populateOnFind)
         .lean();
+      logTrace(`FINDOne=====>>`, item, ColorEnums.BgBlue);
+
       return item;
     } catch (e) {
       logTrace(
@@ -125,6 +127,8 @@ export abstract class MongoGenericRepository<T> {
       const updated: T = await this._repository
         .findByIdAndUpdate(_id, input, { new: true })
         .lean();
+        logTrace('UPDATED ONE >===>> ', updated, ColorEnums.BgCyan);
+
       return updated;
     } catch (e) {
       logTrace(
@@ -191,6 +195,8 @@ export abstract class MongoGenericRepository<T> {
     try {
       const deleted: T = await this._repository.findByIdAndDelete(_id).lean();
       if (!deleted) throw new Error('not found');
+      logTrace('Deleted ONE >===>> ', deleted, ColorEnums.BgMagenta);
+
       return deleted;
     } catch (e) {
       logTrace(

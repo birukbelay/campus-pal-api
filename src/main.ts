@@ -6,7 +6,7 @@ import express from 'express';
 async function bootstrap() {
   const port = 9000;
   const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
   // app.use(express.json());
   // app.use(express.urlencoded({ extended: true }));
 

@@ -2,12 +2,13 @@ import mongoose, { Document, Types } from 'mongoose';
 
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
-import { ApiHideProperty } from '@nestjs/swagger';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 
 import { User } from '../../users';
 
 @Schema()
 export class Article {
+  @ApiProperty({ name: 'id' })
   readonly _id: string;
 
   @Prop({ type: String })
@@ -20,21 +21,24 @@ export class Article {
   title: string;
 
   @Prop({ type: String })
-  coverImage: string;
+  coverImage?: string;
 
   @Prop({ type: [{ type: String, ref: 'Tag.Name' }] })
   tags: string[];
+  
+  @Prop({ type: String })
+  type: string
 
-  @Prop({ type: Number, required: true, default: 0 })
+  @Prop({ type: Number, required: false, default: 0 })
   importance: number;
 
-  @Prop({ type: Number, required: true, default: 0 })
+  @Prop({ type: Number, required: false, default: 0 })
   upvoteCount: number;
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })
   upVotersIds: string[];
 
-  @Prop({ type: Number, required: true, default: 0 })
+  @Prop({ type: Number, required: false, default: 0 })
   downVoteCount: number;
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })
